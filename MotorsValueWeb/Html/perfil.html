@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario - Motors Value</title>
+    <link rel="stylesheet" href="../css/perfil.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
+            <h1>MOTORS VALUE</h1>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="venta.html">Venta</a></li>
+                <li><a href="alquiler.html">Alquiler</a></li>
+                <li><a href="subasta.html">Subasta</a></li>
+                <li><a href="solicitud.html">Solicitud</a></li>
+            </ul>
+            <div class="usuario-icono">
+                <img src="../Img/userLogin.png" alt="Usuario">
+            </div>
+        </nav>
+    </header>
+
+    <main class="contenedor">
+        <div class="panel-usuario">
+            <div class="perfil">
+                <img src="../Img/userLogin.png" alt="Imagen Usuario" class="imagen-perfil">
+                <h2 id="nombre">Nombre</h2>
+                <p id="correo">Correo:</p>
+                <p id="telefono">Teléfono:</p>
+                <button class="btn-editar">Editar datos</button>
+            </div>
+        </div>
+        <div class="transacciones">
+            <h2>Historial de Transacciones</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-transacciones">
+                    <!-- Las transacciones se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../js/perfil.js"></script>
+</body>
+</html>

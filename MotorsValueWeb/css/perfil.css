@@ -1,0 +1,162 @@
+/* General */
+body {
+    margin: 0;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #425359;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    width: 98%;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    gap: 10px;
+    background-color: #ffffff;
+    width: 450px;
+    padding: 10px 20px;
+    margin-left: -10px;
+    margin-right: 40px;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 50%);
+}
+
+.logo img {
+    width: 80px;
+    margin-right: 10px;
+}
+
+.logo h1 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #04407b; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.logo h1::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 5px; 
+    background-color: #a5a5a8;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 1100px;
+    margin: 0;
+    padding: 15px 0px 20px 25px;
+    height: 50px;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 80px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #a5a5a8;
+    font-size: 25px;
+    transition: color 0.3s;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+.navbar ul li a:hover {
+    color: #1E75BB;
+}
+
+.usuario-icono img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.usuario-icono img:hover {
+    transform: scale(1.1);
+}
+
+/* Contenedor principal */
+.contenedor {
+    display: flex;
+    margin-top: 100px;
+    padding: 20px;
+    gap: 30px;
+}
+
+.panel-usuario {
+    flex: 1;
+    
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-height: 500px;
+}
+
+.perfil .imagen-perfil {
+    width: 200px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.btn-editar {
+    background-color: #04407b;
+    color: white;
+    border: none;
+    padding: 9px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 30px;
+}
+
+.btn-editar:hover {
+    background-color: #1E75BB;
+}
+
+.transacciones {
+    flex: 2;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.transacciones h2 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table th {
+    background-color: #04407b;
+    color: white;
+}
