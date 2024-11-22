@@ -16,9 +16,9 @@ header {
     align-items: center;
     justify-content: space-between;
     width: 1100px;
-    margin: 0;
-    padding: 15px 0px 20px 25px;
-    height: 50px;
+    margin-left: 40px ;
+    padding: 15px 0px 15px 25px;
+    height: 52px;
 }
 
 .logo {
@@ -27,16 +27,22 @@ header {
     margin-left: 10px;
     gap: 10px;
     background-color: #ffffff;
-    width: 450px;
-    padding: 10px 20px;
+    width: 329px;
+    padding: 10px 40px;
     margin-left: -10px;
-    margin-right: 40px;
+    margin-right: 60px;
     clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 50%);
+}
+
+.retorno{
+    text-decoration: none;
+    width: 400px;
 }
 
 .logo img {
     width: 80px;
     margin-right: 10px;
+    margin-left: -20px;
 }
 
 .logo h1 {
@@ -72,6 +78,10 @@ nav ul li a {
 
 nav ul li a:hover {
     color: #1E75BB;
+}
+
+nav ul li a.active {
+    color: #aac5cd;
 }
 
 .registrar-btn a {
