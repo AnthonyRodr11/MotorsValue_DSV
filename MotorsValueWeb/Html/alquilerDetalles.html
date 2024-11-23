@@ -5,7 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de Alquiler</title>
     <link rel="stylesheet" href="../css/alquiler.css">
-    <iframe class="navbar" src="navbar.html" frameborder="0"></iframe>
+    <div id="navbar"></div>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error cargando el navbar:', error));
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Obtener la URL de la página actual
+            const currentPath = window.location.pathname;
+
+            // Seleccionar todos los enlaces del navbar
+            const navLinks = document.querySelectorAll("nav a");
+
+            // Comparar la URL de cada enlace con la URL actual
+            navLinks.forEach(link => {
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.add("active");
+                }
+            });
+        });
+    </script>
+
 </head>
 <body>
     <div class="contenedor">
@@ -71,15 +97,14 @@
                         
                     </div>
                 </div>
-                <div>
-                    <div>
-                        total:
-                        <label for="dineroTotal">
-                        </label>  
+                <div  class="totales">
+                    <div id="pago">
+                        <p><b>Total a pagar:</b></p>
+                        <label id="dineroTotal">$0.00</label>
                     </div>
-                    <div>
-                        seguro: <label for="precioSeguro"></label>
-                        tarifa F: <label for="tarifaTotal"></label>
+                    <div id="sumatoria">
+                        <p>Total de Seguro: <label id="precioSeguro">$0.00</label></p>
+                        <p>Total de Tarifa: <label id="tarifaTotal">$0.00</label></p>
                     </div>
                 </div>
             </div>
@@ -109,49 +134,123 @@
             }
         }
 
-
-        // Obtener los tipos de seguro y mostrarlos
-        async function obtenerSeguros() {
-            try {
-                const respuesta = await fetch(`https://localhost:7129/MotorsApi/Alquiler/seguros`);
-                if (!respuesta.ok) throw new Error('Error al obtener los seguros');
-
-                // Parseamos el JSON devuelto
-                const seguros = await respuesta.json();
-
-                if (seguros.length === 0) {
-                    console.log("No se encontraron seguros");
-                    return;
-                }
-    
-                // Crear las opciones de seguro dinámicamente
-                const contenedorSeguros = document.querySelector('.seguro');
-                contenedorSeguros.innerHTML = ''; // Limpiar opciones anteriores
-
-    
-                seguros.forEach((seguro, index) => {
-                    // Asegúrate de acceder correctamente a las propiedades
-                    contenedorSeguros.innerHTML += `
-                        <p>${seguro.tipo_seguro}: $${seguro.precio} 
-                            <input type="radio" name="seguro" id="rdb_${index}" value="${seguro.tipo_seguro}">
-                        </p>
-                    `;
-                });
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
     
         // Llamadas iniciales al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('nombreAuto'); // ¿Existe?
-            document.getElementById('imgAuto');    // ¿Existe?
-            document.getElementById('tarifaDia'); // ¿Existe?
+            document.getElementById('nombreAuto');
+            document.getElementById('imgAuto');
+            document.getElementById('tarifaDia');
 
-            const placa = 'AAA-111'; // Cambia por la placa que quieras buscar
+            const placa = 'AAA-111'; // Aun falta terminar esta parte, la placa debe cambiar de forma dinámica
             obtenerCarroPorPlaca(placa);
+        });       
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Función para calcular el número de días entre dos fechas
+            function calcularDias(fechaInicio, fechaFin) {
+                const fecha1 = new Date(fechaInicio);
+                const fecha2 = new Date(fechaFin);
+
+                // Validar que ambas fechas sean válidas
+                if (isNaN(fecha1.getTime()) || isNaN(fecha2.getTime())) {
+                    return 0;
+                }
+
+                const diferenciaTiempo = fecha2 - fecha1;
+                return Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24)+1); // Diferencia en días
+            }
+
+            // Función para calcular el total
+            function calcularTotal() {
+                const tarifaDia = parseFloat(document.getElementById("tarifaDia").textContent.replace("$", ""));
+                const fechaRetiro = document.getElementById("fechaRetiro").value;
+                const fechaEntrega = document.getElementById("fechaEntrega").value;
+
+                // Validar que ambas fechas estén seleccionadas
+                if (!fechaRetiro || !fechaEntrega) {
+                    return; // No ejecutar hasta que ambas fechas estén definidas
+                }
+
+                const diasAlquiler = calcularDias(fechaRetiro, fechaEntrega);
+
+                // Validar que haya al menos un día de alquiler
+                if (diasAlquiler <= 0) {
+                    alert("Por favor, seleccione fechas válidas.");
+                    return;
+                }
+
+                // Obtener el precio del seguro seleccionado
+                const seguros = document.querySelectorAll("input[name='seguro']");
+                let precioSeguro = 0;
+                seguros.forEach(seguro => {
+                    if (seguro.checked) {
+                        // Obtener el precio del seguro desde el texto (ejemplo: $15)
+                        const textoSeguro = seguro.parentElement.textContent;
+                        const matchPrecio = textoSeguro.match(/\$(\d+)/);
+                        if (matchPrecio) {
+                            precioSeguro = parseFloat(matchPrecio[1]);
+                        }
+                    }
+                });
+
+                // Calcular los totales
+                const tarifaTotal = diasAlquiler * tarifaDia;
+                const totalSeguro = diasAlquiler * precioSeguro;
+                const dineroTotal = tarifaTotal + totalSeguro;
+
+                // Mostrar los resultados en las etiquetas correspondientes
+                document.getElementById("tarifaTotal").textContent = `$${tarifaTotal.toFixed(2)}`;
+                document.getElementById("precioSeguro").textContent = `$${totalSeguro.toFixed(2)}`;
+                document.getElementById("dineroTotal").textContent = `$${dineroTotal.toFixed(2)}`;
+            }
+
+            // Función para configurar los eventos de cambio en los seguros
+            function configurarEventosSeguros() {
+                const seguros = document.querySelectorAll("input[name='seguro']");
+                seguros.forEach(seguro => {
+                    seguro.addEventListener("change", calcularTotal);
+                });
+            }
+
+            // Obtener los tipos de seguro y mostrarlos
+            async function obtenerSeguros() {
+                try {
+                    const respuesta = await fetch(`https://localhost:7129/MotorsApi/Alquiler/seguros`);
+                    if (!respuesta.ok) throw new Error('Error al obtener los seguros');
+
+                    // Parseamos el JSON devuelto
+                    const seguros = await respuesta.json();
+
+                    if (seguros.length === 0) {
+                        console.log("No se encontraron seguros");
+                        return;
+                    }
+
+                    // Crear las opciones de seguro dinámicamente
+                    const contenedorSeguros = document.querySelector('.seguro');
+                    contenedorSeguros.innerHTML = ''; // Limpiar opciones anteriores
+
+                    seguros.forEach((seguro, index) => {
+                        contenedorSeguros.innerHTML += `
+                            <p>${seguro.tipo_seguro}: $${seguro.precio} 
+                                <input type="radio" name="seguro" id="rdb_${index}" value="${seguro.tipo_seguro}">
+                            </p>
+                        `;
+                    });
+
+                    // Configurar eventos para los seguros generados dinámicamente
+                    configurarEventosSeguros();
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+
+            // Escuchar cambios en las fechas
+            document.getElementById("fechaRetiro").addEventListener("change", calcularTotal);
+            document.getElementById("fechaEntrega").addEventListener("change", calcularTotal);
+            
+            obtenerSeguros();
         });
-        obtenerSeguros();
     </script>
 
 </body>

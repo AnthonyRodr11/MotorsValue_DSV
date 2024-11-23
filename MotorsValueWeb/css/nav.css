@@ -27,11 +27,12 @@ header {
     margin-left: 10px;
     gap: 10px;
     background-color: #ffffff;
-    width: 329px;
-    padding: 10px 40px;
+    width: 450px;
+    height: 67px;
+    padding: 10px 20px;
     margin-left: -10px;
-    margin-right: 60px;
-    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 50%);
+    margin-right: 40px;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
 }
 
 .retorno{
@@ -42,7 +43,6 @@ header {
 .logo img {
     width: 80px;
     margin-right: 10px;
-    margin-left: -20px;
 }
 
 .logo h1 {
