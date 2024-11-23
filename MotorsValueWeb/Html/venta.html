@@ -72,47 +72,56 @@
             try {
                 const respuesta = await fetch(`https://localhost:7129/MotorsApi/ventaFlota/listaFlota/${estado}`);
                 const datos = await respuesta.json();
-                console.log(JSON.stringify(datos));
+                console.log('Datos recibidos:', datos);
                 return datos;
             } catch (error) {
                 console.error('Error al obtener datos del API:', error);
                 return [];
             }
         }
-        
 
         function crearCaja(datos) {
             const contenedor = document.getElementById('contenedor-caja');
-            contenedor.innerHTML = '';
-
+            contenedor.innerHTML = ''; // Limpia el contenedor
+    
             datos.forEach(item => {
                 const caja = document.createElement('div');
                 caja.classList.add('caja');
-
+                
+                // Agregar atributos data-id y data-placa para usar en eventos
+                caja.setAttribute('data-placa', item.placa);
+    
                 caja.innerHTML = `
                     <h3>${item.marca} ${item.modelo}</h3>
                     <p class="precio">Precio: $${item.precio}</p>
                     <img src="${item.foto}" alt="Foto de ${item.marca} ${item.modelo}">
                 `;
-
+                
+            
+                // Redirige al hacer clic, usando el ID del auto
                 caja.onclick = () => {
-                    window.location.href = `ventaPerfil.html?id=${item.id}`;
+                    const id = caja.getAttribute('data-placa');
+                    if (id && id !== 'undefined' && id !== '') {
+                        window.location.href = `ventaPerfil.html?id=${id}`;
+                    } else {
+                        console.error('No se puede redirigir: el ID es inválido');
+                        alert('No se encontró la información del auto.');
+                    }
                 };
-
-        
+    
                 contenedor.appendChild(caja);
             });
         }
-
+    
         async function actualizarCaja() {
-            const estado = 'venta';
+            const estado = 'venta'; // Puedes cambiar esto según sea necesario
             const datos = await obtenerDatos(estado);
             crearCaja(datos);
         }
-
-        actualizarCaja();
-
-        setInterval(actualizarCaja, 10000);
+    
+        actualizarCaja(); // Carga inicial
+        setInterval(actualizarCaja, 10000); // Actualiza cada 10 segundos
     </script>
+    
 </body>
 </html>
