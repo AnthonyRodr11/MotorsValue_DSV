@@ -65,7 +65,7 @@
     <script>
         async function obtenerDatos() {
             try {
-                const respuesta = await fetch('https://localhost:7129/MotorsApi/ventaFlota/listaFlota/venta');          
+                const respuesta = await fetch('https://localhost:7129/MotorsApi/flotaCarro/verCarroceria/venta');
                 const datos = await respuesta.json();
                 return datos;
             } catch (error) {
