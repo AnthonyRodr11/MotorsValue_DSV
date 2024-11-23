@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motors Value Venta</title>
+    <link rel="stylesheet" href="../css/nav.css">
+    <style>
+        #contenedor-caja {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+        }
+        .caja {
+            background-color: #f0f8ff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 200px;
+            transition: transform 0.2s;
+        }
+
+        .caja:hover {
+            transform: scale(1.05);
+        }
+        .caja h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .caja p {
+            font-size: 14px;
+            color: #555;
+            margin: 0;
+        }
+    </style>
+</head>
+<header>
+    <a href="inicio.html" class="retorno">
+        <div class="logo">
+            <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
+            <h1>MOTORS VALUE</h1>
+            
+        </div>
+    </a>
+    <div class="navbar">
+        <nav>
+            <ul>
+                <li><a href="venta.html" class="active">Venta</a></li>
+                <li><a href="alquiler.html">Alquiler</a></li>
+                <li><a href="subasta.html">Subasta</a></li>
+                <li><a href="solicitud.html">Solicitud</a></li>
+            </ul>
+        </nav>
+        <div class="registrar-btn">
+            <a href="registro.html">Registrarse</a>
+        </div>
+    </div>
+</header>
+<body>
+    <div id="contenedor-caja"></div>
+    <script>
+        async function obtenerDatos() {
+            try {
+                const respuesta = await fetch('https://localhost:7129/MotorsApi/flotaCarro/verCarroceria/venta');
+                const datos = await respuesta.json();
+                return datos;
+            } catch (error) {
+                console.error('Error al obtener datos del API:', error);
+                return [];
+            }
+        }
+
+        function crearCaja(datos) {
+            const contenedor = document.getElementById('contenedor-caja');
+    
+            contenedor.innerHTML = '';
+    
+            datos.forEach(item => {
+                const caja = document.createElement('div');
+                caja.classList.add('caja');
+                caja.innerHTML = `
+                    <h3>${item.titulo}</h3>
+                    <p>${item.descripcion}</p>
+                `;
+                contenedor.appendChild(caja);
+            });
+        }
+
+        async function actualizarCaja() {
+            const datos = await obtenerDatos();
+            crearCaja(datos);
+        }
+        actualizarCaja();
+        setInterval(actualizarCaja, 10000);
+    </script>
+</body>
+</html>
