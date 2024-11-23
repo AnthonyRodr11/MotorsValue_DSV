@@ -15,31 +15,48 @@ namespace MotorsApi.BD.CRUD.Read
 
             try
             {
-                //Limpiamos parametros
+                // Limpiamos parámetros
                 cmd.Parameters.Clear();
 
-                //Especificamos el tipo de comando
+                // Especificamos el tipo de comando
                 cmd.CommandType = CommandType.Text;
 
-                //asignamos consulta a realizar
-                cmd.CommandText = "SELECT placa, marca, modelo FROM Flota_Carro WHERE estado = @estado";
+                // Realizamos un JOIN entre Flota_Carro y Flota_Venta para obtener solo los campos necesarios
+                cmd.CommandText = @"
+                    SELECT 
+                        c.placa, c.marca, c.modelo, c.foto, 
+                        v.precio
+                    FROM 
+                        Flota_Carro c
+                    JOIN 
+                        Flota_Venta v ON c.placa = v.placa
+                    WHERE 
+                        c.estado = @estado";
 
                 // Agregamos el parámetro estado
                 cmd.Parameters.AddWithValue("@estado", estado);
 
+                // Abrimos la conexión
                 abrirConexion();
-
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        // Agregamos cada vehiculo a la lista
-                        data = $"Placa: {reader["placa"]}, Marca: {reader["marca"]}, Modelo: {reader["modelo"]}";
-                        autos.Add(data);
+                        // Creamos un objeto Flota_CarroRequest para almacenar los datos
+                        Flota_CarroRequest flota = new Flota_CarroRequest()
+                        {
+                            placa = reader["placa"].ToString(),
+                            marca = reader["marca"].ToString(),
+                            modelo = reader["modelo"].ToString(),
+                            foto = reader["foto"].ToString(),
+                            precio = Convert.ToDouble(reader["precio"])
+                        };
+
+                        // Agregamos el objeto a la lista
+                        autos.Add(flota);
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -85,13 +102,13 @@ namespace MotorsApi.BD.CRUD.Read
                             marca = reader["marca"].ToString(),
                             modelo = reader["modelo"].ToString(),
                             color = reader["color"].ToString(),
-                            km = Convert.ToDouble(reader["color"]),
+                            km = Convert.ToDouble(reader["km"]),
                             tipo_gas = reader["tipo_gas"].ToString(),
                             carroceria = reader["carroceria"].ToString(),
                             estado = reader["estado"].ToString(),
                             descripcion = reader["descripcion"].ToString(),
                             disponibilidad = Convert.ToBoolean(reader["disponibilidad"]),
-                            foto = reader.ToString()
+                            foto = reader["foto"].ToString()
 
                         };
 

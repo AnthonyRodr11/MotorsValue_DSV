@@ -31,10 +31,15 @@
             color: #333;
             margin-bottom: 10px;
         }
-        .caja p {
-            font-size: 14px;
-            color: #555;
-            margin: 0;
+        .caja img {
+            width: 200px;
+            height: auto;
+        }
+        .precio {
+            font-size: 16px;
+            font-weight: bold;
+            color: green;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -43,7 +48,6 @@
         <div class="logo">
             <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
             <h1>MOTORS VALUE</h1>
-            
         </div>
     </a>
     <div class="navbar">
@@ -62,11 +66,13 @@
 </header>
 <body>
     <div id="contenedor-caja"></div>
+
     <script>
-        async function obtenerDatos() {
+        async function obtenerDatos(estado) {
             try {
-                const respuesta = await fetch('https://localhost:7129/MotorsApi/flotaCarro/verCarroceria/venta');
+                const respuesta = await fetch(`https://localhost:7129/MotorsApi/ventaFlota/listaFlota/${estado}`);
                 const datos = await respuesta.json();
+                console.log('Datos recibidos:', datos);
                 return datos;
             } catch (error) {
                 console.error('Error al obtener datos del API:', error);
@@ -76,26 +82,46 @@
 
         function crearCaja(datos) {
             const contenedor = document.getElementById('contenedor-caja');
-    
-            contenedor.innerHTML = '';
+            contenedor.innerHTML = ''; // Limpia el contenedor
     
             datos.forEach(item => {
                 const caja = document.createElement('div');
                 caja.classList.add('caja');
+                
+                // Agregar atributos data-id y data-placa para usar en eventos
+                caja.setAttribute('data-placa', item.placa);
+    
                 caja.innerHTML = `
-                    <h3>${item.titulo}</h3>
-                    <p>${item.descripcion}</p>
+                    <h3>${item.marca} ${item.modelo}</h3>
+                    <p class="precio">Precio: $${item.precio}</p>
+                    <img src="${item.foto}" alt="Foto de ${item.marca} ${item.modelo}">
                 `;
+                
+            
+                // Redirige al hacer clic, usando el ID del auto
+                caja.onclick = () => {
+                    const id = caja.getAttribute('data-placa');
+                    if (id && id !== 'undefined' && id !== '') {
+                        window.location.href = `ventaPerfil.html?id=${id}`;
+                    } else {
+                        console.error('No se puede redirigir: el ID es inválido');
+                        alert('No se encontró la información del auto.');
+                    }
+                };
+    
                 contenedor.appendChild(caja);
             });
         }
-
+    
         async function actualizarCaja() {
-            const datos = await obtenerDatos();
+            const estado = 'venta'; // Puedes cambiar esto según sea necesario
+            const datos = await obtenerDatos(estado);
             crearCaja(datos);
         }
-        actualizarCaja();
-        setInterval(actualizarCaja, 10000);
+    
+        actualizarCaja(); // Carga inicial
+        setInterval(actualizarCaja, 10000); // Actualiza cada 10 segundos
     </script>
+    
 </body>
 </html>

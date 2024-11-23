@@ -2,19 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            // Use IntelliSense para averiguar qué atributos existen para la depuración de C#.
-            // Usar el puntero por encima para la descripción de los atributos existentes
-            // Para obtener más información, visite https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md.
+            "type": "firefox",
+            "request": "attach",
+            "name": "Attach"
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch localhost",
+            "url": "http://localhost/index.html",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            // Si ha cambiado las plataformas de destino, asegúrese de actualizar la ruta de acceso del programa.
             "program": "${workspaceFolder}/MotorsApi/bin/Debug/net8.0/MotorsApi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/MotorsApi",
             "stopAtEntry": false,
-            // Habilite el inicio de un explorador web cuando se inicie ASP.NET Core. Para obtener más información: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
@@ -30,6 +38,12 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        },
+        {
+            "type": "chrome",
+            "name": "http://127.0.0.1:5500/MotorsValueWeb/Html/venta.html",
+            "request": "launch",
+            "url": "http://127.0.0.1:5500/MotorsValueWeb/Html/venta.html"
         }
     ]
 }

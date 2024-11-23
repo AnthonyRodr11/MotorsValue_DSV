@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquiler</title>
+    <link rel="stylesheet" href="../css/alquiler.css">
+    <div id="navbar"></div>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            })
+            .catch(error => console.error('Error cargando el navbar:', error));
+    </script>
+</head>
+<body>
+    <div id="contenedor-caja"></div>
+
+    <script>
+        async function obtenerDatos(estado) {
+            try {
+                const respuesta = await fetch(`https://localhost:7129/MotorsApi/Alquiler/alquiler`);
+                const datos = await respuesta.json();
+                console.log(JSON.stringify(datos));
+                return datos;
+            } catch (error) {
+                console.error('Error al obtener datos del API:', error);
+                return [];
+            }
+        }
+        
+
+        function crearCaja(datos) {
+            const contenedor = document.getElementById('contenedor-caja');
+            contenedor.innerHTML = '';
+
+            datos.forEach(item => {
+                const caja = document.createElement('div');
+                caja.classList.add('caja');
+
+                caja.innerHTML = `
+                    <h3>${item.marca} ${item.modelo}</h3>
+                    <p class="precio">Precio: $}</p>
+                    <img src="${item.foto}" alt="Foto de ${item.marca} ${item.modelo}">
+                `;
+
+                caja.onclick = () => {
+                    window.location.href = `ventaPerfil.html?id=${item.id}`;
+                };
+
+        
+                contenedor.appendChild(caja);
+            });
+        }
+
+        async function actualizarCaja() {
+            const estado = 'alquiler';
+            const datos = await obtenerDatos(estado);
+            crearCaja(datos);
+        }
+
+        actualizarCaja();
+
+        setInterval(actualizarCaja, 10000000);
+    </script>
+</body>
+</html>

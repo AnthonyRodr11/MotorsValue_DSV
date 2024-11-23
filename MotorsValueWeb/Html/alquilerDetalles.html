@@ -112,6 +112,18 @@
         </div>
     </div>
 
+    <div id="popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>Alquiler</h2>
+            <p>¿Seguro que desea realizar la compra?</p>
+            <div class="popup-buttons">
+                <button id="popupAceptar">Aceptar</button>
+                <button id="popupCancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+
     <script>
        
         async function obtenerCarroPorPlaca(placa) {
@@ -251,6 +263,81 @@
             
             obtenerSeguros();
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnPagar = document.querySelector('button'); // El botón Pagar
+            const popup = document.getElementById('popup');
+            const btnAceptar = document.getElementById('popupAceptar');
+            const btnCancelar = document.getElementById('popupCancelar');
+
+            // Mostrar el popup al hacer clic en el botón Pagar
+            btnPagar.addEventListener('click', () => {
+                popup.style.display = 'flex';
+            });
+
+            // Aceptar la compra
+            btnAceptar.addEventListener('click', () => {
+                // Obtener los valores seleccionados
+                const seguroSeleccionado = document.querySelector('input[name="seguro"]:checked');
+                if (!seguroSeleccionado) {
+                    alert("Por favor, seleccione un seguro antes de continuar.");
+                    popup.style.display = 'none';
+                    return;
+                }
+
+                // Transformar el ID del seguro (e.g., "rdb_2" -> 3)
+                const seguroIdString = seguroSeleccionado.id; // Obtiene el ID como "rdb_2"
+                const seguroIdNumero = parseInt(seguroIdString.split('_')[1], 10) + 1; // Convierte a número y ajusta
+                const fechaRetiro = document.getElementById('fechaRetiro').value;
+                const fechaEntrega = document.getElementById('fechaEntrega').value;
+                const placa = 'AAA-111'; // Esto debería actualizarse dinámicamente según tu lógica
+                const idUsuario = 1; // Este valor debe obtenerse de la sesión o como corresponda
+                const tipoTarifa = '1'; // Actualiza según tus requerimientos
+                const tarifaTotal = parseFloat(document.getElementById('dineroTotal').textContent.replace('$', ''));
+
+                if (!seguroSeleccionado || !fechaRetiro || !fechaEntrega) {
+                    alert("Por favor, complete todos los campos antes de continuar.");
+                    popup.style.display = 'none';
+                    return;
+                }
+
+                const datos = {
+                    idSeguro: seguroIdNumero, // Envía el ID del seguro seleccionado
+                    fechaRetiro,
+                    fechaEntrega,
+                    placa,
+                    idUsuario,
+                    tipoTarifa,
+                    tarifaTotal,
+                };
+
+                console.log(JSON.stringify(datos));
+                // Enviar datos al servidor
+                fetch('https://localhost:7129/MotorsApi/Alquiler/registar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datos),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.Mensaje || 'Operación exitosa.');
+                        popup.style.display = 'none';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Ocurrió un error al procesar la solicitud.');
+                    });
+            });
+
+            // Cancelar el popup
+            btnCancelar.addEventListener('click', () => {
+                popup.style.display = 'none';
+            });
+        });
+
+
     </script>
 
 </body>
