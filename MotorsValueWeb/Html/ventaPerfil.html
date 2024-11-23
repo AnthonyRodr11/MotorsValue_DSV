@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venta Perfil</title>
+    <link rel="stylesheet" href="../css/nav.css">
+    <style>
+        .especificaciones {
+            margin-top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: #88898d;
+            align-items: center;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 50%);
+            margin-left: 800px;
+        }
+        .especificacion-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: -350px; 
+            width: 1%;
+            justify-content: flex-start;
+        }
+        .especificacion-texto {
+            font-size: 18px;
+            color: #fff;
+            text-align: left;
+            width: 250px;
+        }
+        .especificacion-img {
+            width: 45px;
+            height: auto;
+        }
+        .fotoAuto {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .fotoAuto img {
+            width: 300px;
+            height: auto;
+        }
+        .detalleAuto {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .detalleAuto h2 {
+            font-size: 24px;
+            color: #333;
+        }
+        .detalleAuto p {
+            font-size: 18px;
+            color: #555;
+        }
+        .precio {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<header>
+    <a href="inicio.html" class="retorno">
+        <div class="logo">
+            <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
+            <h1>MOTORS VALUE</h1>
+        </div>
+    </a>
+    <div class="navbar">
+        <nav>
+            <ul>
+                <li><a href="venta.html" class="active">Venta</a></li>
+                <li><a href="alquiler.html">Alquiler</a></li>
+                <li><a href="subasta.html">Subasta</a></li>
+                <li><a href="solicitud.html">Solicitud</a></li>
+            </ul>
+        </nav>
+        <div class="registrar-btn">
+            <a href="registro.html">Registrarse</a>
+        </div>
+    </div>
+</header>
+<body>
+    <div id="fotoAuto" class="fotoAuto"></div>
+    <div class="especificaciones">
+        <div class="especificacion-item">
+            <img src="../Img/kilometraje.png" class="especificacion-img" alt="Kilometraje">
+            <div class="especificacion-texto" id="km"></div>
+        </div>
+        <div class="especificacion-item">
+            <img src="../Img/transmision.png" class="especificacion-img" alt="Transmisión">
+            <div class="especificacion-texto" id="transmision"></div>
+        </div>
+        <div class="especificacion-item">
+            <img src="../Img/gas.png" class="especificacion-img" alt="Gas">
+            <div class="especificacion-texto" id="gas"></div>
+        </div>
+        <div class="especificacion-item">
+            <img src="../Img/carroceria.png" class="especificacion-img" alt="Carrocería">
+            <div class="especificacion-texto" id="carroceria"></div>
+        </div>
+    </div>
+
+    <div id="detalleAuto" class="detalleAuto"></div>
+
+    <script>
+        function obtenerIdAuto() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        async function obtenerDatosAuto(id) {
+            try {
+                const respuesta = await fetch(`https://localhost:5001/MotorsApi/ventaFlota/listaFlota/${id}`);
+                const datos = await respuesta.json();
+                return datos;
+            } catch (error) {
+                console.error('Error al obtener los datos del auto:', error);
+                return null;
+            }
+        }
+
+        function mostrarDetallesAuto(auto) {
+            const fotoAuto = document.getElementById('fotoAuto');
+            const detalleAuto = document.getElementById('detalleAuto');
+
+            if (auto) {
+                fotoAuto.innerHTML = `<img src="${auto.foto}" alt="Foto de ${auto.marca} ${auto.modelo}">`;
+
+                detalleAuto.innerHTML = `
+                    <h2>${auto.marca} ${auto.modelo} (${auto.año})</h2>
+                    <p><strong>Kilometraje:</strong> ${auto.km} km</p>
+                    <p><strong>Transmisión:</strong> ${auto.transmision}</p>
+                    <p><strong>Tipo de Gas:</strong> ${auto.tipo_gas}</p>
+                    <p><strong>Carrocería:</strong> ${auto.carroceria}</p>
+                    <p><strong>Estado:</strong> ${auto.estado}</p>
+                    <p><strong>Descripción:</strong> ${auto.descripcion}</p>
+                    <p class="precio"><strong>Precio:</strong> $${auto.precio}</p>
+                `;
+
+                document.getElementById('km').innerText = `Kilometraje: ${auto.km} km`;
+                document.getElementById('transmision').innerText = `Transmisión: ${auto.transmision}`;
+                document.getElementById('gas').innerText = `Gas: ${auto.tipo_gas}`;
+                document.getElementById('carroceria').innerText = `Carrocería: ${auto.carroceria}`;
+            } else {
+                detalleAuto.innerHTML = '<p>No se pudo cargar la información del auto.</p>';
+            }
+        }
+
+        async function cargarAuto() {
+            const idAuto = obtenerIdAuto();
+            if (idAuto) {
+                const auto = await obtenerDatosAuto(idAuto);
+                mostrarDetallesAuto(auto);
+            }
+        }
+
+        cargarAuto();
+    </script>
+
+</body>
+</html>
