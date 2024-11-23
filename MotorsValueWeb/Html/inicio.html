@@ -22,7 +22,7 @@
             </ul>
         </nav>
         <div class="registrar-btn">
-            <a href="registro.html">Registrarse</a>
+            <a href="login.html">Iniciar sesion</a>
         </div>
     </div>
 </header>
@@ -36,4 +36,15 @@
         </p>
     </div>
 </body>
-</html>
+<script>
+    const userId = localStorage.getItem('userId');
+    console.log('ID recuperada:', userId);
+
+    if (userId) {
+        console.log(`Bienvenido usuario con ID: ${userId}`);
+    } else {
+        console.log('No hay usuario autenticado. Redirigiendo...');
+        document.location.href = '../Html/login.html';
+    }
+</script>
+</html>     
