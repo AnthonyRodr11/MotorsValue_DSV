@@ -3,54 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Detalles de Alquiler</title>
+    <link rel="stylesheet" href="../css/alquiler.css">
+    <iframe class="navbar" src="navbar.html" frameborder="0"></iframe>
 </head>
-<header>
-    <div class="logo">
-        <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
-        <h1>MOTORS VALUE</h1>
-    </div>
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a href="venta.html">Venta</a></li>
-                <li><a href="alquiler.html">Alquiler</a></li>
-                <li><a href="subasta.html">Subasta</a></li>
-                <li><a href="solicitud.html">Solicitud</a></li>
-            </ul>
-        </nav>
-        <div class="registrar-btn">
-            <a href="registro.html">Registrarse</a>
-        </div>
-    </div>
-</header>
 <body>
     <div class="contenedor">
+
+        <div class="imagen">
+            <label id="nombreAuto">Nombre del Auto</label>
+            <img id="imgAuto" src="../Img/FordRanger.png" alt="imagen del auto">
+            <p>Tarifa por Día: <span id="tarifaDia">$0</span></p>
+        </div>
+
         <div class="informacion">
-            <div>
-                <h1>Seguro</h1>
-                <div><img src="../Img/protection.png"></div>
-                <div>
-                    <p>Seguro 1:</p>
-                    <p>Seguro 2:</p>
-                    <p>Seguro 3:</p>
-                </div>
-                <div>
-                    <input type="radio" name="seguro" id="rdb_1">
-                    <input type="radio" name="seguro" id="rdb_2">
-                    <input type="radio" name="seguro" id="rdb_3">
-                </div>
+            <div class="Detalles">
+                <table>
+                    <tr>
+                        <th class="polygon"><div class="poligono"></div></th>
+                        <th><h1>Seguro</h1></th>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>
+                            <img src="../Img/protection.png" class="icono">
+                        </th>
+                        <th class="seguro">
+                            <p>Seguro 1: <input type="radio" name="seguro" id="rdb_1"></p>
+                            <p>Seguro 2: <input type="radio" name="seguro" id="rdb_2"></p>
+                            <p>Seguro 3: <input type="radio" name="seguro" id="rdb_3"></p>
+                        </th>
+                    </tr>
+                </table>
             </div>
-            <div>
-                <h1>Entrega y Retiro</h1>
+            <div class="Detalles">
+                <table>
+                    <tr>
+                        <th class="polygon"><div class="poligono"></div></th>
+                        <th><h1>Entrega y Retiro</h1></th>
+                    </tr>
+                </table>
                 <div>
+                    <table>
+                        <tr>
+                            <th>
+                                <div>
+                                    <img src="../Img/calendar.png" class="icono">
+                                </div>
+                                <input type="date" id="fechaRetiro">
+                            </th>
+                            <th>
+                                <img src="../Img/fast-forward.png" class="icono" id="flecha">
+                            </th>
+                            <th>
+                                <div>
+                                    <img src="../Img/calendar.png" class="icono">
+                                </div>                                
+                                <input type="date" id="fechaEntrega">
+                            </th>
+                        </tr>
+                    </table>
                     <div>
-                        <img src="../Img/calendar.png">
-                        <input type="datetime" id="retiro">
+                        
                     </div>
                     <div>
-                        <img src="../Img/calendar.png">
-                        <input type="datetime" id="entrega">
+                        
                     </div>
                 </div>
                 <div>
@@ -65,12 +83,76 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="imagen">
-            <label for="nombreAuto"></label>
-            <img src="../Img/Ford Ranger.png">
-            Tarifa x dia : <label for="tarifaDia"></label>
+            <button>Pagar</button>
         </div>
     </div>
+
+    <script>
+       
+        async function obtenerCarroPorPlaca(placa) {
+            try {
+                const respuesta = await fetch(`https://localhost:7129/MotorsApi/Alquiler/auto/${placa}`);
+                if (!respuesta.ok) throw new Error('Error al obtener los datos del carro');
+
+                const carro = await respuesta.json();
+
+                if (!carro || !carro.marca || !carro.modelo || !carro.foto || !carro.tarifa) {
+                    throw new Error('Datos incompletos del carro');
+                }
+
+                document.getElementById('nombreAuto').textContent = `${carro.marca} ${carro.modelo}`;
+                document.getElementById('imgAuto').src = carro.foto;
+                document.getElementById('tarifaDia').textContent = `$${carro.tarifa.toFixed(2)}`;
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert("No se pudo obtener la información del carro. Verifique la placa ingresada.");
+            }
+        }
+
+
+        // Obtener los tipos de seguro y mostrarlos
+        async function obtenerSeguros() {
+            try {
+                const respuesta = await fetch(`https://localhost:7129/MotorsApi/Alquiler/seguros`);
+                if (!respuesta.ok) throw new Error('Error al obtener los seguros');
+
+                // Parseamos el JSON devuelto
+                const seguros = await respuesta.json();
+
+                if (seguros.length === 0) {
+                    console.log("No se encontraron seguros");
+                    return;
+                }
+    
+                // Crear las opciones de seguro dinámicamente
+                const contenedorSeguros = document.querySelector('.seguro');
+                contenedorSeguros.innerHTML = ''; // Limpiar opciones anteriores
+
+    
+                seguros.forEach((seguro, index) => {
+                    // Asegúrate de acceder correctamente a las propiedades
+                    contenedorSeguros.innerHTML += `
+                        <p>${seguro.tipo_seguro}: $${seguro.precio} 
+                            <input type="radio" name="seguro" id="rdb_${index}" value="${seguro.tipo_seguro}">
+                        </p>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    
+        // Llamadas iniciales al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('nombreAuto'); // ¿Existe?
+            document.getElementById('imgAuto');    // ¿Existe?
+            document.getElementById('tarifaDia'); // ¿Existe?
+
+            const placa = 'AAA-111'; // Cambia por la placa que quieras buscar
+            obtenerCarroPorPlaca(placa);
+        });
+        obtenerSeguros();
+    </script>
+
 </body>
 </html>

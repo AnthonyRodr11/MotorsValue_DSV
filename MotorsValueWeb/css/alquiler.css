@@ -1,0 +1,143 @@
+/* General */
+html, body{
+    margin: 0;
+    width: 100%;
+
+    height: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Fondo diagonal */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color:#004a8f;
+    clip-path: polygon(64% 100%, 78% 0, 100% 0, 100% 100%, 77% 100%, 91% 0, 88% 0, 74% 100%); /*No me vuelvan a ponerme a hacer esto por favor, hacer un polígono así sin guía es una tortura por favor ayudenme me están explotando!*/
+    z-index: -1; /* Coloca el fondo detrás de todo el contenido */
+}
+
+/* Navbar */
+.navbar{
+    width: 100% !important;
+    max-height: 16%;
+    height: 100% !important;
+}
+
+/*Contenedor intermedio*/
+.contenedor{
+    margin: 0% 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2%;
+}
+
+/* Información del panel */
+.informacion{
+    display:grid;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 1%;
+    max-width: 30%;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    
+}
+
+/* Detalles del panel */
+.Detalles{
+    display: grid;
+    height: auto;
+    margin: 0 0 1em 0;
+}
+
+.Detalles,h1{
+    text-align: center;
+    color: #004a8f;
+    
+}
+
+.Detalles,div,table,tr,th,input{
+    font-size: x-large;
+}
+
+.poligono{
+    display: grid;
+    max-height: fit-content;
+    height: 10%;
+    width: 10%;
+    padding: 10px 20px;
+    margin-left: -10px;
+    margin-right: 40px;
+    background-color:#004a8f;
+    clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+}
+
+.polygon{
+    max-width: 3%;
+    width: 100%;
+}
+
+/* Iconos y tablas */
+.icono{
+    max-width: 40%;
+    width: 100%;
+    margin: 3% auto;
+}
+
+
+.seguro{
+    max-width: 100%;
+    width: 70%;
+    text-align: left;
+    
+}
+
+#flecha{
+    margin:40%;
+    max-width: 20%;
+    width: 100%;
+    display: flex;
+}
+
+h1{
+    margin: 0;
+}
+
+/* Imagen del auto */
+.imagen{
+    max-width: 60%;
+    width: 100%;
+    display: grid;
+    text-align: center;
+}
+
+.imagen,img{
+    max-width: 100%;
+}
+
+/* Botón pagar */
+button{
+    background-color: #004a8f;
+    max-width: 40%;
+    align-items: center;
+    color: white;
+    padding: 10px 20px;
+    border:none;
+    border-radius: 3%;
+    cursor:pointer;
+    transition: backgroun-color 0.3s ease;
+    margin:0 30%;
+    min-width: 40%;
+    font-size: large;
+}
+
+button:hover{
+    background-color: #002d62;
+}
+
