@@ -22,10 +22,11 @@ body::before {
 }
 
 /* Navbar */
-.navbar{
+#navbar{
     width: 100% !important;
-    max-height: 16%;
+    max-height: 87.5px;
     height: 100% !important;
+    margin: 0 0 2% 0;
 }
 
 /*Contenedor intermedio*/
@@ -81,6 +82,21 @@ body::before {
 .polygon{
     max-width: 3%;
     width: 100%;
+}
+
+.totales{
+    display:flex;
+    gap:15%;
+    justify-content: center;
+    align-items: center;
+}
+
+#pago{
+    color: #9e951a;
+}
+#pago p{
+    margin: 0;
+    align-items: center;
 }
 
 /* Iconos y tablas */
