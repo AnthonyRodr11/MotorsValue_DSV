@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Motors Value</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <nav>
+                <a class="logo" href="inicio.html">
+                    <img src="../Img/Logo_MV.png" alt="Logo">
+                    <span class="titulo">Motors Value</span>
+                </a>
+            </nav>
+            <div class="content">
+                <h1>Compra, venta y <br> alquiler de autos</h1>
+            </div>
+            <form class="form needs-validation" novalidate> 
+                <div class="box">
+                    <img class="userImage" src="../Img/userLogin.png">
+                    <input class="form-control" type="email" id="email" placeholder="Correo electronico (@)" required>
+                    <input class="form-control" type="password" id="password" placeholder="Contraseña" required minlength="3" maxlength="30">
+                    <button class="pulse" type="submit">Ingresar</button>
+                </div>
+                
+                <div class="registro">
+                    ¿No tiene cuenta? <a href="register.html">Registrarse</a>
+                </div>        
+        
+                <div class="nuevaCuenta">
+                    <a href="password.html">¿Olvido su contraseña?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    (() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+
+<script>
+    document.querySelector('form').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Previene el comportamiento por defecto del formulario
+
+        // Captura los valores de los campos
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        if (!email || !password) {
+            alert("Por favor, complete todos los campos obligatorios.");
+            return;
+        }
+        
+        try {
+            // Envío de datos al controlador usando fetch
+            const response = await fetch(`https://localhost:7129/MotorsApi/Usuario/user/login/${email}/${password}`, {
+                method: 'GET', // Cambia a GET porque estás usando parámetros en la URL
+            });
+
+            // Maneja la respuesta
+            if (response.ok) {
+                const result = await response.json();
+                console.log(JSON.stringify(result));;
+                localStorage.setItem('userId', result);
+                console.log(localStorage.getItem('userId'));;
+                document.location.href = '../Html/inicio.html'; // Redirige a la página de inicio
+                alert('Bienvenido');
+            } else {
+                const error = await response.json();
+                alert('El usuario no existe'); // Muestra mensaje de error
+            }
+        } catch (error) {   
+            console.error('Error en la solicitud:', error);
+            alert('Ocurrió un error al intentar conectarse con el servidor.');
+        }
+    });
+</script>
+
+</html>
