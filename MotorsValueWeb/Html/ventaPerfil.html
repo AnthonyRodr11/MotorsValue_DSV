@@ -127,71 +127,75 @@
 </body>
 
 <script>
+    // Obtiene el parámetro 'id' de la URL
     function obtenerIdAuto() {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('id'); // Obtén el parámetro 'id' de la URL
+        return urlParams.get('id'); // Ejemplo: ?id=123
     }
 
+    // Hace una solicitud a la API para obtener los datos del auto
     async function obtenerDatosAuto(id) {
-        console.log(id);
         const url = `https://localhost:7129/MotorsApi/ventaFlota/flotaDetalle/${id}`;
-        console.log(`Solicitando a la URL: ${url}`);
         try {
             const respuesta = await fetch(url);
             if (!respuesta.ok) {
                 throw new Error(`Error en la respuesta: ${respuesta.status} ${respuesta.statusText}`);
             }
-            const auto = await respuesta.json();
-            console.log(auto);
-            return auto;
+            return await respuesta.json(); // Devuelve los datos como JSON
         } catch (error) {
             console.error('Error al obtener los datos del auto:', error);
-            return null;
+            return null; // Devuelve null en caso de error
         }
     }
 
-
+    // Muestra los datos del auto en la página
     function mostrarAuto(auto) {
         const fotoAuto = document.getElementById('fotoAuto');
         const detalleAuto = document.getElementById('detalleAuto');
 
-        if (auto) {
-            // Crear el elemento de imagen
-            const img = document.createElement('img');
-            img.src = auto.foto;
-            img.alt = `Foto de ${auto.marca} ${auto.modelo}`;
-            fotoAuto.innerHTML = ''; // Limpia el contenedor antes de añadir contenido
-            fotoAuto.appendChild(img);
+        if (Array.isArray(auto) && auto.length > 0) {
+            const datosAuto = auto[0]; // Accedemos al primer elemento del array
 
-            // Crear contenedor de detalles
-            const detallesHTML = `
-                <h2>${auto.marca} ${auto.modelo}</h2>
-                <p><strong>Kilometraje:</strong> ${auto.km} km</p>
-                <p><strong>Transmisión:</strong> ${auto.transmision}</p>
-                <p><strong>Tipo de Gas:</strong> ${auto.tipo_gas}</p>
-                <p><strong>Carrocería:</strong> ${auto.carroceria}</p>
-                <p class="precio"><strong>Precio:</strong> $${auto.precio}</p>
+            console.log('Datos del auto:', datosAuto);
+
+            // Actualizamos la imagen del auto
+            fotoAuto.innerHTML = `
+                <img src="${datosAuto.foto}" alt="Foto de ${datosAuto.marca} ${datosAuto.modelo}">
             `;
 
-            detalleAuto.innerHTML = detallesHTML; // Inserta el HTML de una sola vez
+            // Actualizamos los detalles del auto
+            detalleAuto.innerHTML = `
+                <h2>${datosAuto.marca || 'N/A'} ${datosAuto.modelo || 'N/A'}</h2>
+                <p><strong>Kilometraje:</strong> ${datosAuto.km || 'N/A'} km</p>
+                <p><strong>Transmisión:</strong> ${datosAuto.transmision || 'N/A'}</p>
+                <p><strong>Tipo de Gas:</strong> ${datosAuto.tipo_gas || 'N/A'}</p>
+                <p><strong>Carrocería:</strong> ${datosAuto.carroceria || 'N/A'}</p>
+                <p class="precio"><strong>Precio:</strong> $${datosAuto.precio || 'N/A'}</p>
+            `;
         } else {
+            // Mostramos un mensaje de error si no hay datos
             detalleAuto.innerHTML = '<p>No se pudo cargar la información del auto.</p>';
         }
     }
 
+    // Función principal que carga los datos al iniciar la página
     async function cargarAuto() {
-        const idAuto = obtenerIdAuto(); // Obtenemos el ID del auto desde la URL
+        const idAuto = obtenerIdAuto(); // Obtenemos el ID desde la URL
         if (idAuto) {
-            const auto = await obtenerDatosAuto(idAuto); // Obtenemos los datos del auto desde la API
-            mostrarAuto(auto); // Mostramos los detalles del auto en la página
+            const auto = await obtenerDatosAuto(idAuto); // Obtenemos los datos del auto
+            if (auto) {
+                mostrarAuto(auto); // Mostramos los datos del auto
+            } else {
+                console.error('No se pudieron obtener los datos del auto.');
+            }
         } else {
-            alert('No se proporcionó ningún ID en la URL.');
             console.error('El parámetro ID no está presente en la URL.');
         }
     }
 
-
-    cargarAuto(); // Cargar los datos al iniciar la página
+    // Ejecutamos la carga de datos al cargar la página
+    cargarAuto();
 </script>
+
 
 </html>
