@@ -6,36 +6,39 @@
     <title>Venta Perfil</title>
     <link rel="stylesheet" href="../css/nav.css">
     <style>
+        body{
+            max-height: 1200px;
+            align-items: center;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
         .especificaciones-container {
             display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
             margin-top: 100px;
+            width: 800px;
+            background-color: #88898d;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%)
         }
 
         .fotoAuto {
-            text-align: center;
-            margin-right: 30px; /* Espacio entre la foto y las especificaciones */
+            display: flex;
         }
         
         .fotoAuto img {
-            width: 300px;
+            max-width: 100%;
+            width: 350px;
             height: auto;
         }
 
         .especificaciones {
-            display: flex;
             flex-direction: column;
             gap: 20px;
-            background-color: #88898d;
             padding: 20px;
             width: 300px;
         }
-
         .especificacion-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            display: flex; /* Alinear elementos en una fila */
+            align-items: center; /* Centrar verticalmente */
+            gap: 10px; /* Espacio entre la imagen y el texto */
         }
 
         .especificacion-img {
@@ -46,9 +49,24 @@
         .especificacion-texto {
             font-size: 18px;
             color: #fff;
-            text-align: left;
-            width: 250px;
         }
+        
+        /* Ajustar el contenedor que contiene el título y el texto */
+        .especificacion-contenido {
+            display: flex;
+            flex-direction: column; /* Alinear el título y texto en columna */
+        }
+
+        
+
+        .especificacion-titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0; /* Quita margen por defecto */
+            color: black; /* Color del título */
+            font-style: oblique;
+        }
+
 
         .detalleAuto {
             margin-top: 30px;
@@ -70,6 +88,20 @@
             font-weight: bold;
             color: green;
             margin-top: 20px;
+        }
+        button{
+            background-color: #004a8f;
+            max-width: 40%;
+            align-items: center;
+            color: white;
+            padding: 10px 20px;
+            border:none;
+            border-radius: 100px;
+            cursor:pointer;
+            transition: backgroun-color 0.3s ease;
+            margin:0 30%;
+            min-width: 40%;
+            font-size: large;
         }
     </style>
 </head>
@@ -96,31 +128,35 @@
 </header>
 <body>
     <div class="especificaciones-container">
-        <!-- Foto del auto -->
-        <div class="fotoAuto" id="fotoAuto"></div>
 
         <!-- Especificaciones -->
-        <div class="especificaciones">
+        <div class="especificaciones-img">
             <div class="especificacion-item">
                 <img src="../Img/kilometraje.png" class="especificacion-img" alt="Kilometraje">
+                <h2 class="especificacion-titulo">Kilometraje:</h2>
                 <div class="especificacion-texto" id="km"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/transmision.png" class="especificacion-img" alt="Transmisión">
+                <h2 class="especificacion-titulo">Transmision:</h2>
                 <div class="especificacion-texto" id="transmision"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/gas.png" class="especificacion-img" alt="Gas">
+                <h2 class="especificacion-titulo">Combustible:</h2>
                 <div class="especificacion-texto" id="gas"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/carroceria.png" class="especificacion-img" alt="Carrocería">
+                <h2 class="especificacion-titulo">Carroceria:</h2>
                 <div class="especificacion-texto" id="carroceria"></div>
             </div>
         </div>
     </div>
+    <div class="fotoAuto" id="fotoAuto"></div>
 
     <div id="detalleAuto" class="detalleAuto"></div>
+    <button>Comprar</button>
 
     
     
@@ -163,15 +199,22 @@
                 <img src="${datosAuto.foto}" alt="Foto de ${datosAuto.marca} ${datosAuto.modelo}">
             `;
 
-            // Actualizamos los detalles del auto
+            // Actualizamos el nombre y marca del auto
             detalleAuto.innerHTML = `
                 <h2>${datosAuto.marca || 'N/A'} ${datosAuto.modelo || 'N/A'}</h2>
-                <p><strong>Kilometraje:</strong> ${datosAuto.km || 'N/A'} km</p>
-                <p><strong>Transmisión:</strong> ${datosAuto.transmision || 'N/A'}</p>
-                <p><strong>Tipo de Gas:</strong> ${datosAuto.tipo_gas || 'N/A'}</p>
-                <p><strong>Carrocería:</strong> ${datosAuto.carroceria || 'N/A'}</p>
-                <p class="precio"><strong>Precio:</strong> $${datosAuto.precio || 'N/A'}</p>
             `;
+
+            // Asignar los datos obtenidos a los divs correspondientes
+            document.getElementById('km').innerText = `${datosAuto.km || 'N/A'} km`;
+            document.getElementById('transmision').innerText = datosAuto.transmision || 'N/A';
+            document.getElementById('gas').innerText = datosAuto.tipo_gas || 'N/A';
+            document.getElementById('carroceria').innerText = datosAuto.carroceria || 'N/A';
+
+            // Agregar el precio en un nuevo elemento debajo del nombre y marca del auto
+            const precioElemento = document.createElement('p');
+            precioElemento.className = 'precio';
+            precioElemento.innerHTML = `<strong>Precio:</strong> $${datosAuto.precio || 'N/A'}`;
+            detalleAuto.appendChild(precioElemento);
         } else {
             // Mostramos un mensaje de error si no hay datos
             detalleAuto.innerHTML = '<p>No se pudo cargar la información del auto.</p>';
