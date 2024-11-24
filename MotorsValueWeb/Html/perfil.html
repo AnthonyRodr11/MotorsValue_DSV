@@ -4,54 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuario - Motors Value</title>
-    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <style>
+  
+    .informacion-usuario{
+        display:grid;
+        background-color: white;
+        border: 2px solid black;
+        border-radius: 2%;
+        padding: 5%;
+        max-height: 10%;
+        max-width: 25%;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+        margin-top: 5%;
+    }
+
+     
+    
+    .informacion_perfil{
+        max-width: 100%;
+        top: 5%;
+        width: 70%;
+        text-align: left;
+    }
+
+    .poligono{
+        display: grid;
+        max-height: fit-content;
+        height: 10%;
+        width: 10%;
+        padding: 10px 20px;
+        margin-left: -10px;
+        margin-right: 40px;
+        
+        clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
+    }
+
+    .polygon{
+        max-width: 3%;
+        width: 100%;
+    }
+
+
+
+
+    /* Contenedor principal */
+    .contenedor{
+        margin: 0% 2%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2%;
+    }
+
+    .panel-usuario {
+        flex: 1;
+    
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        min-height: 500px;
+    }
+
+    .Detalles{
+    display: grid;
+    height: auto;
+    margin: 0 0 1em 0;
+    }
+
+    .Detalles,h1{
+    text-align: center;
+    color: #004a8f;
+    
+    }
+
+    .Detalles,div,table,tr,th{
+    font-size: x-large;
+    }
+
+    button{
+        background-color: #004a8f;
+        max-width: 40%;
+        align-items: center;
+        color: white;
+        padding: 10px 20px;
+        border:none;
+        border-radius: 100px;
+        cursor:pointer;
+        transition: backgroun-color 0.3s ease;
+        margin:0 30%;
+        min-width: 40%;
+        font-size: large;
+    }
+
+    button:hover{
+        background-color: #002d62;
+    }
+
+    /*Agregando tamaño a foto perfil*/
+    .foto_usuario{
+        max-width: 30%;
+        width: 70%;
+        margin: 1% ;
+        
+    }
+
+    
+
+    .transacciones {
+        flex: 2;
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .transacciones h2 {
+        margin-bottom: 20px;
+    }
+
+   
+    
+</style>
+
 </head>
-<body>
     <header>
+        <a href="login.html" class="retorno">
         <div class="logo">
             <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
             <h1>MOTORS VALUE</h1>
         </div>
-        <nav class="navbar">
+    </a>
+    <div class="navbar">
+        <nav>
             <ul>
                 <li><a href="venta.html">Venta</a></li>
                 <li><a href="alquiler.html">Alquiler</a></li>
                 <li><a href="subasta.html">Subasta</a></li>
                 <li><a href="solicitud.html">Solicitud</a></li>
             </ul>
-            <div class="usuario-icono">
-                <img src="../Img/userLogin.png" alt="Usuario">
-            </div>
         </nav>
-    </header>
+        
+    </div> 
+</header>
 
-    <main class="contenedor">
-        <div class="panel-usuario">
-            <div class="perfil">
-                <img src="../Img/userLogin.png" alt="Imagen Usuario" class="imagen-perfil">
-                <h2 id="nombre">Nombre</h2>
-                <p id="correo">Correo:</p>
-                <p id="telefono">Teléfono:</p>
-                <button class="btn-editar">Editar datos</button>
-            </div>
-        </div>
-        <div class="transacciones">
-            <h2>Historial de Transacciones</h2>
-            <table>
-                <thead>
+<body>
+    
+   <div class="contenedor">
+       
+       
+        <div class="informacion-usuario">
+            <div class="Detalles">
+                <table>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
-                        <th>Monto</th>
+                        <th class="polygon"><div class="poligono"></div></th>
+                        <th><h1>Su perfil</h1></th>
                     </tr>
-                </thead>
-                <tbody id="tabla-transacciones">
-                    <!-- Las transacciones se cargarán aquí -->
-                </tbody>
-            </table>
-        </div>
-    </main>
+                </table>
+                <table>
+                    <tr>
+                        <th>
+                            <img src="../Img/userLogin.png" class="foto_usuario">
+                        </th>
+                        <th class="informacion_perfil">
+                             <label >Nombre: <div id="nombre"></div></label>
+                            <label>Telefono: <div id="telefono"></div></label>
+                            <label>Correo <div id="correo"></div></label>
 
-    <script src="../js/perfil.js"></script>
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+            <button>Editar Perfil</button>
+            
+        </div>
+
+
+    </div>
+            
+
+    <script >
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const id = 1; 
+
+            function obtenerElmalditoperfil() {
+                fetch(`https://localhost:7129/MotorsApi/Usuario/userinfo/${id}`) 
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error al obtener perfil: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        
+                        document.getElementById('nombre').textContent = data.nombre ;
+                        document.getElementById('telefono').textContent = data.telefono ;
+                        document.getElementById('correo').textContent = data.correo;
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+
+            obtenerElmalditoperfil();
+        });
+
+
+
+
+        /*function obtenerElmalditoperfil(){
+            fetch(`https://localhost:7129/MotorsApi/Usuario/userinfo/${id}`) 
+            .then(response => response.json()) 
+            .then(data => {
+                document.getElementById('nombre').textContent = data.nombre;
+                document.getElementById('telefono').textContent = data.telefono;
+                document.getElementById('correo').textContent = data.correo;
+            })
+            .catch(error => console.error('Error al obtener los datos:', error));
+    
+        }   */
+
+
+
+    </script>
 </body>
 </html>
