@@ -1,18 +1,38 @@
-body {
+* {
     margin: 0;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    display: flex;
-    flex-direction: column;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url('../Img/freepik__candid-image-photography-natural-textures-highly-r__58932.jpeg');
-    z-index: -1;
-    background-size: 105%;
+body {
+    display: flex;
+    flex-direction: column;
+    --sb-track-color: #a5a5a8;
+    --sb-thumb-color: #04407b;
+    --sb-size: 14px;
+    background-color: #f0f0f0;
+    /* Fondo general */
+}
+
+body::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 3px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    body {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
 }
 
 body::after {
@@ -20,78 +40,15 @@ body::after {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); 
     z-index: -1;
 }
 
-header {
-    background-color: #425359;
-    justify-content: space-between;
-    display: flex;
+/* Contenedores */
+.container {
+    margin: 0 10%;
 }
 
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 1100px;
-    margin: 0;
-    padding: 15px 0px 20px 25px;
-    height: 50px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    gap: 10px;
-    background-color: #ffffff;
-    width: 450px;
-    padding: 10px 20px;
-    margin-left: -10px;
-    margin-right: 40px;
-    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 0% 50%);
-}
-
-.logo img {
-    width: 80px;
-    margin-right: 10px;
-}
-
-.logo h1 {
-    font-size: 25px;
-    font-weight: bold;
-    color: #04407b; 
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-.logo h1::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 5px; 
-    background-color: #a5a5a8;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 80px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #a5a5a8;
-    font-size: 25px;
-    transition: color 0.3s;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-nav ul li a:hover {
-    color: #1E75BB;
-}
-
+/* Botón de registrar */
 .registrar-btn a {
     background-color: #a5a5a8;
     color: #04407b;
@@ -109,71 +66,190 @@ nav ul li a:hover {
     color: #ffffff;
 }
 
+/* Bienvenida */
 .bienvenida {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px;
+    height: 100%;
     text-align: center;
-    color: #ffffff;
-    font-size: 40px;
 }
 
+/* Presentación */
 .presentacion {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: justify;
-    padding: 20px;
-    margin: 0 40px;
-    color: #ffffff;
-    font-size: 25px;
+    margin: 50px 40px;
+    color: #000000;
+    font-size: 30px;
     line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: center;
-    }
+/* Slider */
+.slider-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 10px;
+}
 
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
+.slide-images {
+    display: flex;
+    width: 100%;
+    transition: transform 1s ease-in-out;
+}
 
-    nav ul {
-        flex-direction: column;
-        gap: 15px;
-    }
+.img-container {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+}
 
-    .bienvenida {
-        font-size: 28px;
-    }
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
-    .presentacion {
-        font-size: 18px;
-        margin: 0 20px;
+/* Botones de navegación */
+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Animaciones de texto */
+.animate-charcter {
+    text-transform: uppercase;
+    background-image: linear-gradient(-225deg, #2b1870 0%, #44107a 29%, #757575 67%, #525252 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+    animation: textclip 2s linear infinite;
+    display: inline-block;
+    font-size: 100px;
+}
+
+@keyframes textclip {
+    to {
+        background-position: 200% center;
     }
 }
 
-@media (max-width: 480px) {
-    nav ul {
-        gap: 10px;
-        font-size: 16px;
+
+/* Media Queries para Responsividad */
+
+/* Pantallas pequeñas (320px+) */
+@media (max-width: 320px) {
+    body {
+        font-size: 14px;
+        /* Ajuste de tamaño de fuente */
     }
 
-    .registrar-btn a {
-        font-size: 16px;
-        padding: 5px 10px;
-    }
-
-    .bienvenida {
-        font-size: 22px;
+    .animate-charcter {
+        font-size: 25px;
+        /* Texto más pequeño en pantalla pequeña */
     }
 
     .presentacion {
-        font-size: 16px;
+        font-size: 5px;
+        /* Texto más pequeño */
         margin: 0 10px;
+        /* Espacio más pequeño */
+    }
+
+    .slider-frame {
+        height: 200px;
+        /* Alto más pequeño para dispositivos móviles */
+    }
+
+    .slider-frame img {
+        object-fit: cover;
+        /* Ajuste adecuado de imágenes */
+    }
+
+    .navbar .hamburger {
+        display: block;
+    }
+}
+
+/* Pantallas medianas (576px+) */
+@media (max-width: 576px) {
+    .animate-charcter {
+        font-size: 30px;
+        /* Aumenta el tamaño de texto para tablets */
+    }
+
+    .presentacion {
+        font-size: 10px !important;
+        margin: 0 20px !important;
+        /* Margen adecuado */
+    }
+
+    table {
+        width: 100%;
+        /* Asegurar que la tabla se ajuste */
+    }
+
+}
+
+/* Pantallas grandes (768px+) */
+@media (max-width: 768px) {
+    .animate-charcter {
+        font-size: 35px;
+        /* Aumentar tamaño de texto en pantallas medianas */
+    }
+
+    .presentacion {
+        font-size: 20px !important;
+    }
+
+    .slider-frame {
+        height: auto;
+        /* Ajustar altura del slider */
+    }
+
+}
+
+/* Pantallas extra grandes (992px+) */
+@media (max-width: 992px) {
+    .animate-charcter {
+        font-size: 40px;
+        /* Mantener tamaño adecuado para pantallas grandes */
+    }
+
+    .presentacion {
+        font-size: 25px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .presentacion {
+        font-size: 30px; /* Aumentar el tamaño del texto */
+        margin: 50px 50px; /* Más espacio para márgenes */
     }
 }

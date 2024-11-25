@@ -1,149 +1,235 @@
+/* General */
 body {
     margin: 0;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    display: flex;
-    flex-direction: column;
+    font-family: sans-serif;
 }
 
 header {
-    background-color: #425359;
-    justify-content: space-between;
-    display: flex;
+    background-color: #333;
+    color: white;
+    padding: 7px 20px;
+    position: default;
+    top: 0;
+    z-index: auto;
 }
 
 .navbar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    width: 1100px;
-    margin-left: 40px ;
-    padding: 15px 0px 15px 25px;
-    height: 52px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.logo {
+.navbar .logo {
     display: flex;
     align-items: center;
-    margin-left: 10px;
     gap: 10px;
-    background-color: #ffffff;
-    width: 450px;
-    height: 67px;
-    padding: 10px 20px;
-    margin-left: -10px;
-    margin-right: 40px;
-    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
 }
 
-.retorno{
-    text-decoration: none;
-    width: 400px;
+.logo img{
+    width: 180px;
 }
 
-.logo img {
-    width: 80px;
+.logo .titulo{
+    font-size: 50px;
     margin-right: 10px;
-}
-
-.logo h1 {
-    font-size: 25px;
     font-weight: bold;
-    color: #04407b; 
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeIn 2s ease-in-out;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.logo h1::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 5px; 
-    background-color: #a5a5a8;
-}
-
-nav ul {
+.navbar .links {
     display: flex;
+    gap: 15px;
+    font-weight: bold;
+}
+
+.navbar .links li {
     list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 80px;
 }
 
-nav ul li a {
+.navbar .links a {
+    color: white;
     text-decoration: none;
-    color: #a5a5a8;
-    font-size: 25px;
-    transition: color 0.3s;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 2rem;
+    transition: color 0.3s ease-in-out;
 }
 
-nav ul li a:hover {
-    color: #1E75BB;
+.navbar .links a:hover {
+    color: #1e90ff;
 }
 
-nav ul li a.active {
-    color: #aac5cd;
-}
-
-.registrar-btn a {
-    background-color: #a5a5a8;
-    color: #04407b;
+.navbar .action_btn {
+    background: #1e90ff;
     padding: 5px 15px;
     border-radius: 20px;
+    color: white;
     text-decoration: none;
-    font-size: 20px;
-    transition: background-color 0.3s, color 0.3s;
-    margin-right: 50px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 2rem;
+
 }
 
-.registrar-btn a:hover {
+.action_btn:hover{
     background-color: #1E75BB;
     color: #ffffff;
 }
 
-@media (max-width: 768px) {
+.navbar .hamburger {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+.dropdown {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background: #444;
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown li {
+    text-align: center;
+    padding: 10px 20px;
+    list-style: none;
+}
+
+.dropdown li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown li:hover {
+    background: #555;
+}
+
+.dropdown.open {
+    display: flex;
+}
+
+@media (max-width: 320px) {
     header {
-        flex-direction: column;
-        align-items: center;
+        padding: 0px;
     }
 
-    .navbar {
-        flex-direction: column;
-        align-items: center;
+    .logo img{
+        width: 80px !important;
     }
 
-    nav ul {
-        flex-direction: column;
-        gap: 15px;
+    .navbar{
+        padding: 10px !important;
+    }
+}
+/* Responsivo */
+@media (max-width: 768px) {
+    .navbar .links {
+        display: none;
     }
 
-    .bienvenida {
-        font-size: 28px;
+    .navbar .hamburger {
+        display: block;
     }
 
-    .presentacion {
-        font-size: 18px;
-        margin: 0 20px;
+    .logo{
+        width: 700px;
+    }
+
+    .action_btn{
+        display: none;
     }
 }
 
-@media (max-width: 480px) {
-    nav ul {
-        gap: 10px;
-        font-size: 16px;
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0 1rem;
     }
 
-    .registrar-btn a {
-        font-size: 16px;
-        padding: 5px 10px;
+    .navbar .logo img {
+        width: 40px;
+        height: auto;
     }
 
-    .bienvenida {
-        font-size: 22px;
+    .navbar .titulo {
+        font-size: 1rem;
     }
 
-    .presentacion {
-        font-size: 16px;
-        margin: 0 10px;
+    .navbar .links {
+        display: none;
+    }
+
+    .navbar .action_btn {
+        display: none;
+    }
+
+    .navbar .hamburger {
+        display: block;
+    }
+
+    .dropdown {
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: 60px;
+        border-radius: 0;
+    }
+
+    .dropdown li {
+        padding: 10px;
+    }
+
+    .dropdown a .action_btn {
+        display: block;
+    }
+
+    .logo img{
+        width: 70px !important;
+    }
+
+    .navbar{
+        padding: 0px;
+    }
+}
+
+
+@media (min-width: 992px) {
+    .navbar .dropdown  {
+        display: none;
+    }
+
+    .logo {
+        width: 400px;
+    }
+
+    .navbar .links a {
+        font-size: 1.2rem;
+    }
+}
+
+.pulse {
+    animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

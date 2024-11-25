@@ -7,35 +7,35 @@
     <link rel="stylesheet" href="../css/inicio.css">
 </head>
 <header>
-    <div class="logo">
-        <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
-        <h1>MOTORS VALUE</h1>
-        <a href="inicio.html"></a>
-    </div>
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a href="venta.html">Venta</a></li>
-                <li><a href="alquiler.html">Alquiler</a></li>
-                <li><a href="subasta.html">Subasta</a></li>
-                <li><a href="solicitud.html">Solicitud</a></li>
-            </ul>
-        </nav>
-        <div class="registrar-btn">
-            <a href="login.html">Iniciar sesion</a>
-        </div>
-    </div>
+    <div id="navbar"></div>
 </header>
 <body>
-    <div class="bienvenida">
-        <h1>¡Bienvenidos a Motors Value!</h1>
+    <div class="container">
+        <div class="bienvenida">
+            <h1 class="animate-charcter">¡Bienvenidos a Motors Value!</h1>
+        </div>
+    
+        <div class="slider-frame">
+            <div class="slide-images">
+                <div class="img-container"><img src="../img/img1.png" alt="Imagen 1"></div>
+                <div class="img-container"><img src="../img/img2.png" alt="Imagen 2"></div>
+                <div class="img-container"><img src="../img/img3.png" alt="Imagen 3"></div>
+            </div>
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>
+        </div>
+        <div class="presentacion">
+            <p>
+                ¡Bienvenidos a Motors Value! Somos una plataforma líder en la venta, alquiler y subasta de automóviles en línea, donde la pasión por los autos se une con la tecnología más avanzada. En Motors Value, creemos que encontrar el vehículo perfecto debe ser una experiencia emocionante y accesible para todos. Ofrecemos una amplia gama de opciones, desde elegantes sedanes y prácticos hatchbacks hasta imponentes SUVs y clásicos de colección, todo al alcance de un clic.
+            </p>
+        </div>
     </div>
-    <div class="presentacion">
-        <p>
-            ¡Bienvenidos a Motors Value! Somos una plataforma líder en la venta, alquiler y subasta de automóviles en línea, donde la pasión por los autos se une con la tecnología más avanzada. En Motors Value, creemos que encontrar el vehículo perfecto debe ser una experiencia emocionante y accesible para todos. Ofrecemos una amplia gama de opciones, desde elegantes sedanes y prácticos hatchbacks hasta imponentes SUVs y clásicos de colección, todo al alcance de un clic.
-        </p>
     </div>
 </body>
+<footer id="footer">
+
+</footer>
+
 <script>
     const userId = localStorage.getItem('userId');
     console.log('ID recuperada:', userId);
@@ -44,7 +44,54 @@
         console.log(`Bienvenido usuario con ID: ${userId}`);
     } else {
         console.log('No hay usuario autenticado. Redirigiendo...');
-        document.location.href = '../Html/login.html';
     }
 </script>
+
+<script>
+    let currentIndex = 0; // Índice actual de la imagen
+    const slides = document.querySelector('.slide-images');
+    const totalSlides = document.querySelectorAll('.img-container').length;
+    const sliderFrame = document.querySelector('.slider-frame'); // Contenedor del slider
+
+    // Función para mover las diapositivas manualmente
+    function moveSlide(direction) {
+        currentIndex += direction;
+
+        // Si se excede el índice, vuelve al inicio o al final
+        if (currentIndex < 0) {
+            currentIndex = totalSlides - 1;
+        } else if (currentIndex >= totalSlides) {
+            currentIndex = 0;
+        }
+
+        // Cambiar la posición usando transform
+        updateSlidePosition();
+    }
+
+    // Función para actualizar la posición de las diapositivas
+    function updateSlidePosition() {
+        const containerWidth = sliderFrame.offsetWidth; // Obtener el ancho dinámico del contenedor
+        const offset = -currentIndex * containerWidth; // Calcular la posición en base al ancho del contenedor
+        slides.style.transform = `translateX(${offset}px)`; // Aplicar el desplazamiento
+    }
+
+    // Desplazamiento automático cada 5 segundos
+    setInterval(() => {
+        moveSlide(1);
+    }, 5000);
+
+    // Actualizar la posición en caso de que el tamaño de la ventana cambie
+    window.addEventListener('resize', updateSlidePosition);
+</script>
+
+<script src="../JavaScript/funciones.js"></script>
+
+<script>
+cargarHTML('navbar', 'navbar.html');
+</script>
+
+<script>
+    cargarHTML('footer', 'footer.html');
+</script>
+
 </html>     

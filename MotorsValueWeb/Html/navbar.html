@@ -5,29 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+   <!-- navbar.html -->
     <header>
-        <a href="inicio.html" class="retorno">
-            <div class="logo">
-                <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
-                <h1>MOTORS VALUE</h1>
-                
-            </div>
-        </a>
         <div class="navbar">
-            <nav>
-                <ul>
-                    <li><a href="venta.html">Venta</a></li>
-                    <li><a href="alquiler.html">Alquiler</a></li>
-                    <li><a href="subasta.html">Subasta</a></li>
-                    <li><a href="solicitud.html">Solicitud</a></li>
-                </ul>
-            </nav>
-            <div class="registrar-btn">
-                <a href="registro.html">Registrarse</a>
+            <a class="logo" href="inicio.html">
+                <img src="../Img/Logo_MV.png" alt="Logo">
+                <span class="titulo">Motors Value</span>
+            </a>
+            <ul class="links">
+                <li><a href="venta.html">Venta</a></li>
+                <li><a href="alquiler.html">Alquiler</a></li>
+                <li><a href="subasta.html">Subasta</a></li>
+                <li><a href="solicitud.html">Solicitud</a></li>
+            </ul>
+            <a href="register.html" class="action_btn pulse">Registrarse</a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
             </div>
         </div>
+        <div class="dropdown">
+            <li><a href="venta.html">Venta</a></li>
+            <li><a href="alquiler.html">Alquiler</a></li>
+            <li><a href="subasta.html">Subasta</a></li>
+            <li><a href="solicitud.html">Solicitud</a></li>
+            <li><a href="register.html" class="action_btn">Registrarse</a></li>
+        </div>
     </header>
+
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const hamburgerBtnIcon = document.querySelector('.hamburger i');
+        const dropDown = document.querySelector('.dropdown');
+
+        // Función para alternar el menú dropdown
+        hamburger.onclick = function () {
+            dropDown.classList.toggle('open');
+            const isOpen = dropDown.classList.contains('open');
+
+            // Cambiar el icono del botón hamburguesa
+            hamburgerBtnIcon.classList = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        };
+
+        // Función para ajustar el estado del menú en función del tamaño de la pantalla
+        function ajustarMenuDropdown() {
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth >= 992) {
+                // Cerrar el menú si está abierto en pantallas grandes
+                if (dropDown.classList.contains('open')) {
+                    dropDown.classList.remove('open');
+                    hamburgerBtnIcon.classList = 'fa-solid fa-bars'; // Restablecer el icono
+                }
+            }
+        }
+
+        // Listener para el cambio de tamaño de la ventana
+        window.addEventListener('resize', ajustarMenuDropdown);
+
+        // Llamar la función al cargar la página para manejar el estado inicial
+        ajustarMenuDropdown();
+
+        document.addEventListener('click', function (event) {
+            const isClickInside = hamburger.contains(event.target) || dropDown.contains(event.target);
+
+            if (!isClickInside && dropDown.classList.contains('open')) {
+                dropDown.classList.remove('open');
+                hamburgerBtnIcon.classList = 'fa-solid fa-bars'; // Restablecer icono
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Obtener la URL de la página actual
+            const currentPath = window.location.pathname;
+            console.log(currentPath);
+    
+            // Seleccionar todos los enlaces del navbar
+            const navLinks = document.querySelectorAll('.navbar .links a');
+    
+            // Comparar la URL de cada enlace con la URL actual
+            navLinks.forEach(link => {
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.toggle('active');
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>
