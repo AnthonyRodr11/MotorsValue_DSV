@@ -6,36 +6,39 @@
     <title>Venta Perfil</title>
     <link rel="stylesheet" href="../css/nav.css">
     <style>
+        body{
+            max-height: 1200px;
+            align-items: center;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
         .especificaciones-container {
             display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
             margin-top: 100px;
+            width: 800px;
+            background-color: #88898d;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%)
         }
 
         .fotoAuto {
-            text-align: center;
-            margin-right: 30px; /* Espacio entre la foto y las especificaciones */
+            display: flex;
         }
         
         .fotoAuto img {
-            width: 300px;
+            max-width: 100%;
+            width: 350px;
             height: auto;
         }
 
         .especificaciones {
-            display: flex;
             flex-direction: column;
             gap: 20px;
-            background-color: #88898d;
             padding: 20px;
             width: 300px;
         }
-
         .especificacion-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            display: flex; /* Alinear elementos en una fila */
+            align-items: center; /* Centrar verticalmente */
+            gap: 10px; /* Espacio entre la imagen y el texto */
         }
 
         .especificacion-img {
@@ -46,9 +49,24 @@
         .especificacion-texto {
             font-size: 18px;
             color: #fff;
-            text-align: left;
-            width: 250px;
         }
+        
+        /* Ajustar el contenedor que contiene el título y el texto */
+        .especificacion-contenido {
+            display: flex;
+            flex-direction: column; /* Alinear el título y texto en columna */
+        }
+
+        
+
+        .especificacion-titulo {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0; /* Quita margen por defecto */
+            color: black; /* Color del título */
+            font-style: oblique;
+        }
+
 
         .detalleAuto {
             margin-top: 30px;
@@ -70,6 +88,20 @@
             font-weight: bold;
             color: green;
             margin-top: 20px;
+        }
+        button{
+            background-color: #004a8f;
+            max-width: 40%;
+            align-items: center;
+            color: white;
+            padding: 10px 20px;
+            border:none;
+            border-radius: 100px;
+            cursor:pointer;
+            transition: backgroun-color 0.3s ease;
+            margin:0 30%;
+            min-width: 40%;
+            font-size: large;
         }
     </style>
 </head>
@@ -96,102 +128,117 @@
 </header>
 <body>
     <div class="especificaciones-container">
-        <!-- Foto del auto -->
-        <div class="fotoAuto" id="fotoAuto"></div>
 
         <!-- Especificaciones -->
-        <div class="especificaciones">
+        <div class="especificaciones-img">
             <div class="especificacion-item">
                 <img src="../Img/kilometraje.png" class="especificacion-img" alt="Kilometraje">
+                <h2 class="especificacion-titulo">Kilometraje:</h2>
                 <div class="especificacion-texto" id="km"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/transmision.png" class="especificacion-img" alt="Transmisión">
+                <h2 class="especificacion-titulo">Transmision:</h2>
                 <div class="especificacion-texto" id="transmision"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/gas.png" class="especificacion-img" alt="Gas">
+                <h2 class="especificacion-titulo">Combustible:</h2>
                 <div class="especificacion-texto" id="gas"></div>
             </div>
             <div class="especificacion-item">
                 <img src="../Img/carroceria.png" class="especificacion-img" alt="Carrocería">
+                <h2 class="especificacion-titulo">Carroceria:</h2>
                 <div class="especificacion-texto" id="carroceria"></div>
             </div>
         </div>
     </div>
+    <div class="fotoAuto" id="fotoAuto"></div>
 
     <div id="detalleAuto" class="detalleAuto"></div>
+    <button>Comprar</button>
 
     
     
 </body>
 
 <script>
+    // Obtiene el parámetro 'id' de la URL
     function obtenerIdAuto() {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('id'); // Obtén el parámetro 'id' de la URL
+        return urlParams.get('id'); // Ejemplo: ?id=123
     }
 
+    // Hace una solicitud a la API para obtener los datos del auto
     async function obtenerDatosAuto(id) {
-        console.log(id);
         const url = `https://localhost:7129/MotorsApi/ventaFlota/flotaDetalle/${id}`;
-        console.log(`Solicitando a la URL: ${url}`);
         try {
             const respuesta = await fetch(url);
             if (!respuesta.ok) {
                 throw new Error(`Error en la respuesta: ${respuesta.status} ${respuesta.statusText}`);
             }
-            const auto = await respuesta.json();
-            console.log(auto);
-            return auto;
+            return await respuesta.json(); // Devuelve los datos como JSON
         } catch (error) {
             console.error('Error al obtener los datos del auto:', error);
-            return null;
+            return null; // Devuelve null en caso de error
         }
     }
 
-
+    // Muestra los datos del auto en la página
     function mostrarAuto(auto) {
         const fotoAuto = document.getElementById('fotoAuto');
         const detalleAuto = document.getElementById('detalleAuto');
 
-        if (auto) {
-            // Crear el elemento de imagen
-            const img = document.createElement('img');
-            img.src = auto.foto;
-            img.alt = `Foto de ${auto.marca} ${auto.modelo}`;
-            fotoAuto.innerHTML = ''; // Limpia el contenedor antes de añadir contenido
-            fotoAuto.appendChild(img);
+        if (Array.isArray(auto) && auto.length > 0) {
+            const datosAuto = auto[0]; // Accedemos al primer elemento del array
 
-            // Crear contenedor de detalles
-            const detallesHTML = `
-                <h2>${auto.marca} ${auto.modelo}</h2>
-                <p><strong>Kilometraje:</strong> ${auto.km} km</p>
-                <p><strong>Transmisión:</strong> ${auto.transmision}</p>
-                <p><strong>Tipo de Gas:</strong> ${auto.tipo_gas}</p>
-                <p><strong>Carrocería:</strong> ${auto.carroceria}</p>
-                <p class="precio"><strong>Precio:</strong> $${auto.precio}</p>
+            console.log('Datos del auto:', datosAuto);
+
+            // Actualizamos la imagen del auto
+            fotoAuto.innerHTML = `
+                <img src="${datosAuto.foto}" alt="Foto de ${datosAuto.marca} ${datosAuto.modelo}">
             `;
 
-            detalleAuto.innerHTML = detallesHTML; // Inserta el HTML de una sola vez
+            // Actualizamos el nombre y marca del auto
+            detalleAuto.innerHTML = `
+                <h2>${datosAuto.marca || 'N/A'} ${datosAuto.modelo || 'N/A'}</h2>
+            `;
+
+            // Asignar los datos obtenidos a los divs correspondientes
+            document.getElementById('km').innerText = `${datosAuto.km || 'N/A'} km`;
+            document.getElementById('transmision').innerText = datosAuto.transmision || 'N/A';
+            document.getElementById('gas').innerText = datosAuto.tipo_gas || 'N/A';
+            document.getElementById('carroceria').innerText = datosAuto.carroceria || 'N/A';
+
+            // Agregar el precio en un nuevo elemento debajo del nombre y marca del auto
+            const precioElemento = document.createElement('p');
+            precioElemento.className = 'precio';
+            precioElemento.innerHTML = `<strong>Precio:</strong> $${datosAuto.precio || 'N/A'}`;
+            detalleAuto.appendChild(precioElemento);
         } else {
+            // Mostramos un mensaje de error si no hay datos
             detalleAuto.innerHTML = '<p>No se pudo cargar la información del auto.</p>';
         }
     }
 
+    // Función principal que carga los datos al iniciar la página
     async function cargarAuto() {
-        const idAuto = obtenerIdAuto(); // Obtenemos el ID del auto desde la URL
+        const idAuto = obtenerIdAuto(); // Obtenemos el ID desde la URL
         if (idAuto) {
-            const auto = await obtenerDatosAuto(idAuto); // Obtenemos los datos del auto desde la API
-            mostrarAuto(auto); // Mostramos los detalles del auto en la página
+            const auto = await obtenerDatosAuto(idAuto); // Obtenemos los datos del auto
+            if (auto) {
+                mostrarAuto(auto); // Mostramos los datos del auto
+            } else {
+                console.error('No se pudieron obtener los datos del auto.');
+            }
         } else {
-            alert('No se proporcionó ningún ID en la URL.');
             console.error('El parámetro ID no está presente en la URL.');
         }
     }
 
-
-    cargarAuto(); // Cargar los datos al iniciar la página
+    // Ejecutamos la carga de datos al cargar la página
+    cargarAuto();
 </script>
+
 
 </html>

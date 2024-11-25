@@ -1,57 +1,415 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuario - Motors Value</title>
-    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <style>
+       
+        html, body{
+            height: 100%;
+            margin: 0;
+        }
+        
+        .contenedor {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1%;
+            padding: 0;
+            height: 100%;
+        }
+
+        
+        .informacion-usuario {
+            background-color: #004a8f;
+            max-width: 350px;
+            width: 100%;
+            border: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            color: white;
+        }
+
+        .foto-usuario {
+            width: 175px;
+            margin-top: 10%;
+            height: 175px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+        }
+
+        .info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .info h2 {
+            font-size: 1.2em;
+            margin-bottom: 4px;
+        }
+
+        .info p {
+            margin: 10px 5;
+            margin-bottom: 20px;
+        }
+
+        .informacion-usuario button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .informacion-usuario button:hover {
+            background-color: #0056b3;
+        }
+
+ 
+        .historial-transacciones {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 20px;
+        }
+
+        .historial-transacciones h2 {
+            color: #004a8f;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table-transacciones {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table-transacciones th, .table-transacciones td {
+            border: 1px solid black;
+            padding: 15px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .table-transacciones th {
+            background-color: #004a8f;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
-            <h1>MOTORS VALUE</h1>
-        </div>
-        <nav class="navbar">
-            <ul>
-                <li><a href="venta.html">Venta</a></li>
-                <li><a href="alquiler.html">Alquiler</a></li>
-                <li><a href="subasta.html">Subasta</a></li>
-                <li><a href="solicitud.html">Solicitud</a></li>
-            </ul>
-            <div class="usuario-icono">
-                <img src="../Img/userLogin.png" alt="Usuario">
+        <a href="login.html" class="retorno">
+            <div class="logo">
+                <img src="../Img/Logo_MV.png" alt="Motors Value Logo">
+                <h1>MOTORS VALUE</h1>
             </div>
-        </nav>
+        </a>
+        <div class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="venta.html">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="subasta.html">Subasta</a></li>
+                    <li><a href="solicitud.html">Solicitud</a></li>
+                </ul>
+            </nav>
+            
+        </div> 
+        
     </header>
 
-    <main class="contenedor">
-        <div class="panel-usuario">
-            <div class="perfil">
-                <img src="../Img/userLogin.png" alt="Imagen Usuario" class="imagen-perfil">
-                <h2 id="nombre">Nombre</h2>
-                <p id="correo">Correo:</p>
-                <p id="telefono">Teléfono:</p>
-                <button class="btn-editar">Editar datos</button>
+    <div class="contenedor">
+        <!-- Sección de información de usuario -->
+        <div class="informacion-usuario">
+            <img src="../Img/userLogin.png" class="foto-usuario" alt="Foto de usuario">
+            <div class="info">
+                <h2 id="nombre">Nombre X</h2>
+                <p>Correo: <span id="correo">correo@x</span></p>
+                <p>Teléfono: <span id="telefono">telefono X</span></p>
+            </div>
+            <button onclick="mostrarFormularioEdicion()">Editar datos</button>
+        </div>
+
+
+        <div id="modal-editar" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarFormularioEdicion()">&times;</span>
+                <h2>Editar Perfil</h2>
+                <form id="form-editar" onsubmit="actualizarDatos(event)">
+                    <label for="nuevoNombre">Nombre:</label>
+                    <input type="text" id="nuevoNombre" required>
+    
+                    <label for="nuevoCorreo">Correo:</label>
+                    <input type="email" id="nuevoCorreo" required>
+    
+                    <label for="nuevoTelefono">Teléfono:</label>
+                    <input type="tel" id="nuevoTelefono" required>
+    
+                    <button type="submit">Guardar cambios</button>
+                </form>
             </div>
         </div>
-        <div class="transacciones">
-            <h2>Historial de Transacciones</h2>
-            <table>
+
+        
+
+        <!-- Sección del historial de transacciones -->
+        <div class="historial-transacciones">
+            <h2>HISTORIAL DE TRANSACCIONES</h2>
+            <table class="table-transacciones" id="tabla-transacciones">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
-                        <th>Monto</th>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Precio</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-transacciones">
-                    <!-- Las transacciones se cargarán aquí -->
+                <tbody>
+                    <!-- Las filas se agregarán aquí dinámicamente -->
                 </tbody>
             </table>
         </div>
-    </main>
+        
+    </div>
 
-    <script src="../js/perfil.js"></script>
+   
+
+
 </body>
+<script>
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const id = 1; 
+
+                function obtenerElmalditoperfil() {
+                    fetch(`https://localhost:7129/MotorsApi/Usuario/userinfo/${id}`) 
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Error al obtener perfil: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            
+                            document.getElementById('nombre').textContent = data.nombre ;
+                            document.getElementById('telefono').textContent = data.telefono ;
+                            document.getElementById('correo').textContent = data.correo;
+                        })
+                        .catch(error => console.error('Error al obtener los datos:', error));
+                }
+
+                obtenerElmalditoperfil();
+            });
+
+
+
+
+            /*function obtenerElmalditoperfil(){
+                fetch(`https://localhost:7129/MotorsApi/Usuario/userinfo/${id}`) 
+                .then(response => response.json()) 
+                .then(data => {
+                    document.getElementById('nombre').textContent = data.nombre;
+                    document.getElementById('telefono').textContent = data.telefono;
+                    document.getElementById('correo').textContent = data.correo;
+                })
+                .catch(error => console.error('Error al obtener los datos:', error));
+        
+            }   */
+
+
+</script>
+
+<script>
+
+    async function listarTransacciones() {
+        const url = "https://localhost:7129/MotorsApi/"; // Cambia esta URL por el endpoint real de tu API
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Error en la red ' + response.status);
+            }
+            
+            const data = await response.json();
+            console.log(data); // Para verificar los datos recibidos
+            
+            const tabla = document.getElementById("tabla-transacciones").getElementsByTagName("tbody")[0];
+            tabla.innerHTML = ''; // Limpiar el contenido previo
+            
+            data.forEach(transaccion => {
+                const fila = document.createElement('tr');
+                
+                // Celda para la placa
+                let celdaPlaca = document.createElement('td');
+                celdaPlaca.textContent = transaccion.placa;
+                fila.appendChild(celdaPlaca);
+                
+                // Celda para la marca
+                let celdaMarca = document.createElement('td');
+                celdaMarca.textContent = transaccion.marca;
+                fila.appendChild(celdaMarca);
+
+                // Celda para el modelo
+                let celdaModelo = document.createElement('td');
+                celdaModelo.textContent = transaccion.modelo;
+                fila.appendChild(celdaModelo);
+                
+                // Celda para el precio
+                let celdaPrecio = document.createElement('td');
+                celdaPrecio.textContent = `$${transaccion.precio}`;
+                fila.appendChild(celdaPrecio);
+                
+                // Agregar la fila a la tabla
+                tabla.appendChild(fila);
+            });
+        } catch (err) {
+            console.error("Error en la comunicación con el API", err);
+        }
+    }
+
+    // Llama a la función cuando la página se haya cargado
+    document.addEventListener("DOMContentLoaded", listarTransacciones);
+
+
+</script>
+<script>
+
+        // Mostrar el formulario de edición
+    function mostrarFormularioEdicion() {
+        document.getElementById("modal-editar").style.display = "block";
+
+        // Rellenar el formulario con los datos actuales
+        document.getElementById("nuevoNombre").value = document.getElementById("nombre").textContent;
+        document.getElementById("nuevoCorreo").value = document.getElementById("correo").textContent;
+        document.getElementById("nuevoTelefono").value = document.getElementById("telefono").textContent;
+    }
+
+    // Cerrar el formulario de edición
+    function cerrarFormularioEdicion() {
+        document.getElementById("modal-editar").style.display = "none";
+    }
+
+    // Enviar los datos actualizados al servidor
+    async function actualizarDatos(event) {
+        event.preventDefault();
+
+        const idUsuario = 1; // Cambia esto al ID real del usuario que se está editando
+        const nuevoNombre = document.getElementById("nuevoNombre").value;
+        const nuevoCorreo = document.getElementById("nuevoCorreo").value;
+        const nuevoTelefono = document.getElementById("nuevoTelefono").value;
+
+        try {
+            const response = await fetch("http://localhost/api/editarUsuario", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id_usuario: idUsuario,
+                    telefono: nuevoTelefono,
+                    correo: nuevoCorreo,
+                    nombre: nuevoNombre
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error en la red: ' + response.status);
+            }
+
+            // Actualizar la información en la página
+            document.getElementById("nombre").textContent = nuevoNombre;
+            document.getElementById("correo").textContent = nuevoCorreo;
+            document.getElementById("telefono").textContent = nuevoTelefono;
+
+            cerrarFormularioEdicion();
+            alert("Perfil actualizado exitosamente");
+        } catch (error) {
+            console.error("Error al actualizar el perfil", error);
+            alert("Hubo un problema al actualizar el perfil");
+        }
+    }
+
+    // Cerrar el modal si se hace clic fuera de él
+    window.onclick = function(event) {
+        const modal = document.getElementById("modal-editar");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+</script>
+
+<style>
+
+
+/* Estilos del modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form label {
+    display: block;
+    margin-top: 10px;
+}
+
+.modal-content form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.modal-content form button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content form button:hover {
+    background-color: #45a049;
+}
+
+</style>
 </html>

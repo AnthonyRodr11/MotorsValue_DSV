@@ -125,6 +125,11 @@
     
 
     <script>
+
+        function obtenerIdAuto() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id'); // Ejemplo: ?id=123
+        }
        
         async function obtenerCarroPorPlaca(placa) {
             try {
@@ -153,7 +158,7 @@
             document.getElementById('imgAuto');
             document.getElementById('tarifaDia');
 
-            const placa = 'AAA-111'; // Aun falta terminar esta parte, la placa debe cambiar de forma dinámica
+            const placa = obtenerIdAuto() // Aun falta terminar esta parte, la placa debe cambiar de forma dinámica
             obtenerCarroPorPlaca(placa);
         });       
 

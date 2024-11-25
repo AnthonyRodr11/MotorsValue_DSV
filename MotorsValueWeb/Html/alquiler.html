@@ -4,15 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alquiler</title>
-    <link rel="stylesheet" href="../css/alquiler.css">
+    <link rel="stylesheet" href="../css/alqui.css">
     <div id="navbar"></div>
     <script>
+        // Cargar el navbar dinámicamente
         fetch('navbar.html')
             .then(response => response.text())
             .then(data => {
+                // Insertar el contenido del navbar en el elemento con id "navbar"
                 document.getElementById('navbar').innerHTML = data;
+
+                // Una vez que el contenido esté cargado, modificar el navbar según la página actual
+                marcarEnlaceActivo();
             })
             .catch(error => console.error('Error cargando el navbar:', error));
+
+        // Función para marcar el enlace activo
+        function marcarEnlaceActivo() {
+            // Obtener solo el nombre del archivo de la página actual (sin directorios)
+            const currentFile = window.location.pathname.split('/').pop();
+
+            // Seleccionar todos los enlaces dentro del elemento <nav>
+            const navLinks = document.querySelectorAll("#navbar nav ul li a");
+
+            // Comparar el nombre del archivo con el atributo href de los enlaces
+            navLinks.forEach(link => {
+                if (link.getAttribute("href") === currentFile) {
+                    link.classList.add("active");
+                }
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -30,27 +52,35 @@
                 return [];
             }
         }
-        
 
         function crearCaja(datos) {
             const contenedor = document.getElementById('contenedor-caja');
-            contenedor.innerHTML = '';
-
+            contenedor.innerHTML = ''; // Limpia el contenedor
+    
             datos.forEach(item => {
                 const caja = document.createElement('div');
                 caja.classList.add('caja');
-
+                
+                // Agregar atributos data-id y data-placa para usar en eventos
+                caja.setAttribute('data-placa', item.placa);
+    
                 caja.innerHTML = `
                     <h3>${item.marca} ${item.modelo}</h3>
-                    <p class="precio">Precio: $}</p>
                     <img src="${item.foto}" alt="Foto de ${item.marca} ${item.modelo}">
                 `;
-
+                
+            
+                // Redirige al hacer clic, usando el ID del auto
                 caja.onclick = () => {
-                    window.location.href = `ventaPerfil.html?id=${item.id}`;
+                    const id = caja.getAttribute('data-placa');
+                    if (id && id !== 'undefined' && id !== '') {
+                        window.location.href = `alquilerDetalles.html?id=${id}`;
+                    } else {
+                        console.error('No se puede redirigir: el ID es inválido');
+                        alert('No se encontró la información del auto.');
+                    }
                 };
-
-        
+    
                 contenedor.appendChild(caja);
             });
         }
@@ -62,6 +92,22 @@
         }
 
         actualizarCaja();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Obtener la URL de la página actual
+            const currentPath = window.location.pathname;
+            console.log(currentPath);
+
+            // Seleccionar todos los enlaces del navbar
+            const navLinks = document.querySelectorAll("nav a");
+
+            // Comparar la URL de cada enlace con la URL actual
+            navLinks.forEach(link => {
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.add("active");
+                }
+            });
+        });
 
         setInterval(actualizarCaja, 10000000);
     </script>
